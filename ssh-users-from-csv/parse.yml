@@ -1,0 +1,17 @@
+---
+- hosts: localhost 
+  gather_facts: false
+  become: true
+  vars:
+    csvfile: "{{ lookup('file', 'users.csv') }}"
+  vars_files:
+    - "./vars/main.yml"
+  tasks:
+    - name: Parse users from CSV To YAML
+      template:
+        src: "./csv.j2"
+        dest: "./parsed_users.yml"
+      run_once: true
+    - name: Creating users from YAML
+      include: parsed_users.yml
+...

@@ -1,0 +1,8 @@
+---
+{% for item in csvfile.split("\n") %}
+{%   if loop.index != 1 %}
+{%     set list = item.split(":") %}
+use_sudo_{{  item.split(":")[2]  }}_{{  item.split(":")[0] | replace(".", "_")  | replace("-", "_")  }}: {{  item.split(":")[3]  }}
+{%   endif %}
+{% endfor %}
+...

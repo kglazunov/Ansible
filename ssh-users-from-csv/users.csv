@@ -1,0 +1,4 @@
+Host:email:username:use_sudo:sudo_to
+well.sf.ca.uss:kmitnik@well.sf.ca.uss:dono:yes:hadoop
+well.sf.ca.uss:kmitnik@well.sf.ca.uss:kmitnik:no:
+well.sf.ca.uss:tshimomura@ucsd.eduu:tshimomura:yes:apache,tomcat

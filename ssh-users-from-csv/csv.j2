@@ -1,0 +1,37 @@
+---
+{% for item in csvfile.split("\n") %}
+{%   if loop.index != 1 %}
+{%     set list = item.split(":") %}
+   - name: Create ssh user {{ list[2]|trim() }} on the {{ list[0]|trim() }}
+     user:
+      name: {{ list[2]|trim() }}
+      password: {{ lookup('password', 'credentials/' +  item.split(":")[2]  + '/sshpassword.txt chars=ascii_letters,digits length=15') | password_hash('sha512')}}
+      state: present
+      update_password: on_create
+     delegate_to: {{ list[0]|trim() }}
+     register: ssh_user_{{  item.split(":")[2]  }}
+   - name: Add {{ list[2]|trim() }} ALL=({{ list[4]|trim() }}) with  NOPASSWD option to the sudo and verify it with visudo -cf %s
+     lineinfile:
+      dest: /etc/sudoers
+      state: present
+      regexp: '^{{ list[2]|trim() }} .*'
+      line: '{{ list[2]|trim() }} ALL=({{ list[4]|trim() }}) NOPASSWD: ALL'
+      validate: '/usr/sbin/visudo -cf %s'
+     delegate_to: {{ list[0]|trim() }}
+     when: use_sudo_{{  item.split(":")[2]  }}_{{  item.split(":")[0] | replace(".", "_") | replace("-", "_")   }} == True
+   - name: Sending an e-mail to {{ list[1]|trim() }} about {{ list[2]|trim() }} ssh access detail to the {{ list[0]|trim() }}
+     mail:
+      host: smtp.gmail.com
+      port: 587
+      username: username@example.com
+      password: 
+      to: {{ list[1]|trim() }}
+      subject: "[Ansible Report] ssh credentials for user {{ list[2]|trim() }} on the {{ list[0]|trim() }}"
+      body: "User {{ list[2]|trim() }} has been created on the {{ list[0]|trim() }}. If you requested sudo to other user, please use command 'sudo -u {{ list[4]|trim() }} -s'.\nThe password is in the attachment. Thank you."
+      attach:
+      - credentials/{{  item.split(":")[2]  }}/sshpassword.txt
+     delegate_to: localhost
+     when: ssh_user_{{  item.split(":")[2]  }}.changed
+{%   endif %}
+{% endfor %}
+...
