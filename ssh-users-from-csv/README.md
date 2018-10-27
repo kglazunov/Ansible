@@ -15,6 +15,7 @@ well.sf.ca.uss:tshimomura@ucsd.eduu:tshimomura:yes:apache,tomcat
   1) Fill the csv file with fqdn hostname,email address,username and etc.
   2) Change email settings in the csv.j2.
   3) Ensure that you have configured MTA in your host where you'll run the playbook.
+  4) Ensure that you have cleaned vars/main.yml and parsed_users.yml before next run.
 
 **Run playbook**
 
