@@ -1,5 +1,5 @@
-###### Create users from csv file and add permissions to /etc/sudoers if needed and send email with credentials.
-###### Once generated password will be applied on each host from csv and stored as plaintext in the credentials/$username$/sshpassword.txt
+**Create users from csv file via Ansible and add permissions to /etc/sudoers if needed and send email with credentials.**
+**Once generated password will be applied on each host from csv and stored as plaintext in the credentials/$username$/sshpassword.txt**
 
 **Examples from the users.csv:**
 ```
@@ -10,6 +10,7 @@ well.sf.ca.uss:tshimomura@ucsd.eduu:tshimomura:yes:apache,tomcat
 ```
 
 **Steps before run**
+
   0) Allow less security app in your google account: https://myaccount.google.com/u/1/lesssecureapps?rfn=27&rfnc=1&eid=-1151598352600325229&et=0&asae=2&pli=1
   1) Fill the csv file with fqdn hostname,email address,username and etc.
   2) Change email settings in the csv.j2.
